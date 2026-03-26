@@ -1,8 +1,20 @@
-# ScreenDusk v3
+# ScreenDusk
 
 ScreenDusk is a lightweight Windows desktop app that applies a software dimming overlay across one or more monitors.
 
 It is designed for privacy-focused screen usage in public spaces and low-light comfort scenarios.
+
+## Download Here
+
+[Download Latest Release](https://github.com/JustinDCosta/ScreenDusk/releases/latest)
+
+Download this file from the release assets:
+
+- ScreenDusk-Windows-x64-Portable.zip
+
+Then extract and run:
+
+- ScreenDusk.exe
 
 ## Highlights
 
