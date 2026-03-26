@@ -7,14 +7,18 @@
         MinWidth="460"
         MinHeight="580"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent"
+        Background="#FFF2F7FC"
         FontFamily="Segoe UI Variable Text"
-        AllowsTransparency="True"
-        WindowStyle="None">
+        AllowsTransparency="False"
+        WindowStyle="None"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
     <Window.Resources>
-        <LinearGradientBrush x:Key="ShellBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#FFF6F9FC" Offset="0" />
-            <GradientStop Color="#FFEAF0F7" Offset="1" />
+        <LinearGradientBrush x:Key="ShellBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFF2F7FC" Offset="0" />
+            <GradientStop Color="#FFE2ECF7" Offset="1" />
         </LinearGradientBrush>
 
         <Style x:Key="GhostButtonStyle" TargetType="Button">
@@ -55,21 +59,66 @@
             <Setter Property="Foreground" Value="White" />
         </Style>
 
-        <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource GhostButtonStyle}">
-            <Setter Property="Width" Value="38" />
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="46" />
             <Setter Property="Height" Value="30" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#FF1C2738" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root" Background="{TemplateBinding Background}" CornerRadius="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#16000000" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#26000000" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TitleBarCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource TitleBarButtonStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root" Background="{TemplateBinding Background}" CornerRadius="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#FFE81123" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#FFC50F1F" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style TargetType="ComboBox">
-            <Setter Property="Height" Value="32" />
+            <Setter Property="Height" Value="36" />
             <Setter Property="MinWidth" Value="120" />
-            <Setter Property="Padding" Value="8,4" />
-            <Setter Property="Background" Value="#FCFFFFFF" />
-            <Setter Property="BorderBrush" Value="#25000000" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="Background" Value="#F0F8FD" />
+            <Setter Property="BorderBrush" Value="#1F17324D" />
             <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
         <Style TargetType="CheckBox">
@@ -85,15 +134,11 @@
         </Style>
     </Window.Resources>
     <Grid Background="{StaticResource ShellBackgroundBrush}">
-        <Border CornerRadius="20"
-                BorderBrush="#24000000"
+        <Border CornerRadius="0"
+                BorderBrush="#18000000"
                 BorderThickness="1"
-                Background="#F9FFFFFF"
-                Margin="8">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.14" />
-            </Border.Effect>
-
+                Background="{StaticResource ShellBackgroundBrush}"
+                Margin="0">
             <Grid Margin="18">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -110,91 +155,102 @@
 
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="ScreenDusk" FontSize="24" FontWeight="SemiBold" Foreground="#FF0F172A" />
-                        <TextBlock Text="Comfort dimming overlay for late-night use" FontSize="12" Foreground="#FF5B6678" Margin="0,2,0,0" />
+                        <TextBlock Text="Privacy-friendly screen dimming overlay for public spaces" FontSize="12" Foreground="#FF5B6678" Margin="0,2,0,0" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Button Style="{StaticResource TitleBarButtonStyle}" Content="_" Click="MinimizeButton_OnClick" />
-                        <Button x:Name="MaximizeRestoreButton" Margin="6,0,0,0" Style="{StaticResource TitleBarButtonStyle}" Content="[]" Click="MaximizeRestoreButton_OnClick" />
-                        <Button Margin="6,0,0,0" Style="{StaticResource TitleBarButtonStyle}" Content="X" Click="CloseButton_OnClick" />
+                        <Button Style="{StaticResource TitleBarButtonStyle}" Content="&#xE921;" Click="MinimizeButton_OnClick" />
+                        <Button x:Name="MaximizeRestoreButton" Style="{StaticResource TitleBarButtonStyle}" Content="&#xE922;" Click="MaximizeRestoreButton_OnClick" />
+                        <Button Style="{StaticResource TitleBarCloseButtonStyle}" Content="&#xE8BB;" Click="CloseButton_OnClick" />
                     </StackPanel>
                 </Grid>
 
                 <TextBlock Grid.Row="1"
                            Margin="0,4,0,18"
-                           Text="Go darker than your monitor's default brightness with a software dimming overlay."
+                           Text="Dim your screen beyond hardware limits to improve privacy without changing monitor brightness settings."
                            Foreground="#FF455266"
                            TextWrapping="Wrap" />
 
-                <StackPanel Grid.Row="2">
-                    <Border CornerRadius="14" Padding="18" BorderBrush="#1A000000" BorderThickness="1" Background="#5CFFFFFF">
-                        <StackPanel>
-                            <DockPanel>
-                                <TextBlock Text="Dimming level" FontSize="14" FontWeight="SemiBold" Foreground="#FF111827" VerticalAlignment="Center" />
-                                <TextBlock DockPanel.Dock="Right" Text="{Binding DimLevelText}" FontSize="15" FontWeight="SemiBold" Foreground="#FF0B63B6" />
-                            </DockPanel>
-                            <Slider Minimum="0"
-                                    Maximum="100"
-                                    Value="{Binding DimLevelPercent, UpdateSourceTrigger=PropertyChanged}"
-                                    TickFrequency="1"
-                                    IsSnapToTickEnabled="False"
-                                    Margin="0,16,0,0"
-                                    LargeChange="5"
-                                    SmallChange="1" />
-                        </StackPanel>
-                    </Border>
+                <ScrollViewer Grid.Row="2"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="0,0,2,0">
+                    <StackPanel Margin="0,0,0,6">
+                        <Border CornerRadius="14" Padding="18" BorderBrush="#1A17324D" BorderThickness="1" Background="#28FFFFFF">
+                            <StackPanel>
+                                <TextBlock Text="Dimming level" FontSize="14" FontWeight="SemiBold" Foreground="#FF111827" />
+                                <Slider Minimum="0"
+                                        Maximum="100"
+                                        Value="{Binding DimLevelPercent, UpdateSourceTrigger=PropertyChanged}"
+                                        TickFrequency="1"
+                                        IsSnapToTickEnabled="False"
+                                        Margin="0,18,0,0"
+                                        LargeChange="5"
+                                        SmallChange="1" />
 
-                    <CheckBox Margin="0,14,0,0"
-                              IsChecked="{Binding IsDimmingEnabled}"
-                              Content="Enable dimming" />
+                                <Grid Margin="0,16,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Current intensity" FontSize="12" Foreground="#FF5B6678" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{Binding DimLevelText}" FontSize="15" FontWeight="SemiBold" Foreground="#FF0B63B6" Margin="24,0,0,0" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
 
-                    <CheckBox IsChecked="{Binding LaunchOnStartup}"
-                              Content="Launch on Windows startup" />
+                        <CheckBox Margin="0,14,0,0"
+                                  IsChecked="{Binding IsDimmingEnabled}"
+                                  Content="Enable dimming" />
 
-                    <CheckBox IsChecked="{Binding MinimizeToTray}"
-                              Content="Minimize to system tray" />
+                        <CheckBox IsChecked="{Binding LaunchOnStartup}"
+                                  Content="Launch on Windows startup" />
 
-                    <Border CornerRadius="12" Padding="14" BorderBrush="#1A000000" BorderThickness="1" Background="#4FFFFFFF" Margin="0,16,0,0">
-                        <StackPanel>
-                            <TextBlock Text="Custom Hotkeys" FontSize="14" FontWeight="SemiBold" Foreground="#FF111827" />
-                            <TextBlock Text="Modifier keys stay fixed as Ctrl + Alt." Margin="0,4,0,10" FontSize="12" Foreground="#FF5B6678" />
+                        <CheckBox IsChecked="{Binding MinimizeToTray}"
+                                  Content="Minimize to system tray" />
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                        <Border CornerRadius="12" Padding="14" BorderBrush="#1A17324D" BorderThickness="1" Background="#20FFFFFF" Margin="0,16,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Custom Hotkeys" FontSize="14" FontWeight="SemiBold" Foreground="#FF111827" />
+                                <TextBlock Text="Modifier keys stay fixed as Ctrl + Alt." Margin="0,4,0,10" FontSize="12" Foreground="#FF5B6678" />
 
-                                <TextBlock Grid.Row="0" Text="Increase dimming" VerticalAlignment="Center" Margin="0,0,12,8" />
-                                <ComboBox Grid.Row="0" Grid.Column="1"
-                                          ItemsSource="{Binding AvailableHotkeyKeys}"
-                                          SelectedItem="{Binding IncreaseHotkeyKey, UpdateSourceTrigger=PropertyChanged}"
-                                          Margin="0,0,0,8" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="1" Text="Decrease dimming" VerticalAlignment="Center" Margin="0,0,12,8" />
-                                <ComboBox Grid.Row="1" Grid.Column="1"
-                                          ItemsSource="{Binding AvailableHotkeyKeys}"
-                                          SelectedItem="{Binding DecreaseHotkeyKey, UpdateSourceTrigger=PropertyChanged}"
-                                          Margin="0,0,0,8" />
+                                    <TextBlock Grid.Row="0" Text="Increase dimming" VerticalAlignment="Center" Margin="0,0,12,8" />
+                                    <ComboBox Grid.Row="0" Grid.Column="1"
+                                              ItemsSource="{Binding AvailableHotkeyKeys}"
+                                              SelectedItem="{Binding IncreaseHotkeyKey, UpdateSourceTrigger=PropertyChanged}"
+                                              Margin="0,0,0,8" />
 
-                                <TextBlock Grid.Row="2" Text="Toggle dimming" VerticalAlignment="Center" Margin="0,0,12,0" />
-                                <ComboBox Grid.Row="2" Grid.Column="1"
-                                          ItemsSource="{Binding AvailableHotkeyKeys}"
-                                          SelectedItem="{Binding ToggleHotkeyKey, UpdateSourceTrigger=PropertyChanged}" />
-                            </Grid>
-                        </StackPanel>
-                    </Border>
+                                    <TextBlock Grid.Row="1" Text="Decrease dimming" VerticalAlignment="Center" Margin="0,0,12,8" />
+                                    <ComboBox Grid.Row="1" Grid.Column="1"
+                                              ItemsSource="{Binding AvailableHotkeyKeys}"
+                                              SelectedItem="{Binding DecreaseHotkeyKey, UpdateSourceTrigger=PropertyChanged}"
+                                              Margin="0,0,0,8" />
 
-                    <TextBlock Margin="0,16,0,0"
-                               Text="Hotkeys apply immediately when you change them."
-                               Foreground="#FF5B6678"
-                               TextWrapping="Wrap" />
-                </StackPanel>
+                                    <TextBlock Grid.Row="2" Text="Toggle dimming" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                    <ComboBox Grid.Row="2" Grid.Column="1"
+                                              ItemsSource="{Binding AvailableHotkeyKeys}"
+                                              SelectedItem="{Binding ToggleHotkeyKey, UpdateSourceTrigger=PropertyChanged}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Margin="0,16,0,0"
+                                   Text="Hotkeys apply immediately when you change them."
+                                   Foreground="#FF5B6678"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
 
                 <Grid Grid.Row="3" Margin="0,22,0,0">
                     <Grid.ColumnDefinitions>

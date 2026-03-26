@@ -2,6 +2,8 @@
 bin/
 obj/
 out/
+artifacts/
+publish/
 
 # User-specific files
 *.user
@@ -27,6 +29,16 @@ packages/
 # OS files
 Thumbs.db
 Desktop.ini
+
+# Signing and secret material
+*.pfx
+*.snk
+*.key
+*.pem
+*.crt
+*.cer
+.env
+.env.*
 
 # Local app settings and generated resources
 **/appsettings.Development.json

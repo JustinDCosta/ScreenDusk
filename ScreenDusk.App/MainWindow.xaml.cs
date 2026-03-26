@@ -77,20 +77,6 @@ public partial class MainWindow : Window
         _viewModel.RequestExit();
     }
 
-    private void TitleBar_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ClickCount == 2)
-        {
-            ToggleMaximizeRestore();
-            return;
-        }
-
-        if (e.ButtonState == MouseButtonState.Pressed)
-        {
-            DragMove();
-        }
-    }
-
     private void MinimizeButton_OnClick(object sender, RoutedEventArgs e)
     {
         WindowState = WindowState.Minimized;
@@ -104,6 +90,20 @@ public partial class MainWindow : Window
     private void CloseButton_OnClick(object sender, RoutedEventArgs e)
     {
         _viewModel.RequestExit();
+    }
+
+    private void TitleBar_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount == 2)
+        {
+            ToggleMaximizeRestore();
+            return;
+        }
+
+        if (e.ButtonState == MouseButtonState.Pressed)
+        {
+            DragMove();
+        }
     }
 
     private void ToggleMaximizeRestore()
@@ -125,7 +125,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        MaximizeRestoreButton.Content = WindowState == WindowState.Maximized ? "❐" : "[]";
+        MaximizeRestoreButton.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
     }
 
     private void RegisterHotkeys()

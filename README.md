@@ -1,138 +1,93 @@
-# ScreenDusk
+# ScreenDusk v3
 
-ScreenDusk is a modern, lightweight Windows desktop app that dims your display using a software overlay, letting you go darker than your monitor's built-in brightness controls.
+ScreenDusk is a lightweight Windows desktop app that applies a software dimming overlay across one or more monitors.
 
-## Why This Tech Stack
+It is designed for privacy-focused screen usage in public spaces and low-light comfort scenarios.
 
-This project uses **C# + WPF (.NET 8)** because it is:
+## Highlights
 
-- Native on Windows, with low overhead compared to browser-based stacks.
-- Great for custom transparent windows and always-on-top overlays.
-- Easy to maintain for beginner-to-intermediate developers.
+- Software dimming overlay (independent from hardware brightness controls)
+- Real-time dimming slider (0% to 100%)
+- Multi-monitor overlay support
+- Click-through overlays (input is not blocked)
+- Tray integration with minimize-to-tray behavior
+- Optional launch at Windows startup
+- Customizable global hotkeys (Ctrl + Alt + [selected key])
+- Persistent settings under `%LOCALAPPDATA%/ScreenDusk/settings.json`
 
-## Features
+## Tech Stack
 
-- Software-based dimming overlay (not hardware brightness).
-- Real-time dimming slider (0% to 100%) with instant updates.
-- Optional enable/disable dimming toggle.
-- Always-on-top, click-through overlay that does not block input.
-- Multi-monitor support (one overlay per connected screen).
-- System tray integration with reopen/exit actions.
-- Minimize-to-tray behavior.
-- Startup on boot option.
-- Global hotkeys:
-  - `Ctrl + Alt + Up`: increase dimming
-  - `Ctrl + Alt + Down`: decrease dimming
-  - `Ctrl + Alt + D`: toggle dimming
-- Persistent user settings (stored in `%LOCALAPPDATA%/ScreenDusk/settings.json`).
-- Lightweight MVVM structure for maintainability.
+- .NET 8
+- WPF (Windows desktop)
+- Small Win32 interop layer for overlay and hotkeys
 
-## Folder Structure
+## Build
 
-```text
-ScreenDusk/
-  ScreenDusk.sln
-  .gitignore
-  README.md
-  ScreenDusk.App/
-    ScreenDusk.App.csproj
-    App.xaml
-    App.xaml.cs
-    MainWindow.xaml
-    MainWindow.xaml.cs
-    Models/
-      AppSettings.cs
-    Infrastructure/
-      NativeMethods.cs
-    Services/
-      AppIconFactory.cs
-      DimmingOverlayManager.cs
-      GlobalHotkeyService.cs
-      OverlayWindow.cs
-      SettingsService.cs
-      StartupService.cs
-      TrayService.cs
-    ViewModels/
-      MainViewModel.cs
-    Infrastructure/
-      RelayCommand.cs
-    Themes/
-      Colors.xaml
-    Resources/
-    Properties/
-      PublishProfiles/
-        FolderProfile.pubxml
-  publish.ps1
-```
-
-## Build and Run
-
-### Prerequisites
+Prerequisites:
 
 1. Windows 10/11
 2. .NET 8 SDK
-3. Visual Studio 2022 (or VS Code with C# tooling)
 
-### Steps
-
-1. Open a terminal in the project root.
-2. Restore packages:
-   ```powershell
-   dotnet restore
-   ```
-3. Build:
-   ```powershell
-   dotnet build -c Release
-   ```
-4. Run:
-   ```powershell
-   dotnet run --project .\ScreenDusk.App\ScreenDusk.App.csproj
-   ```
-
-### Publish (single-file, self-contained)
+Commands:
 
 ```powershell
-./publish.ps1
+dotnet restore
+dotnet build .\ScreenDusk.sln -c Release
+dotnet run --project .\ScreenDusk.App\ScreenDusk.App.csproj
 ```
 
-Or directly:
+## Publish
+
+Unsigned publish:
 
 ```powershell
-dotnet publish .\ScreenDusk.App\ScreenDusk.App.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+.\publish.ps1
 ```
 
-## Usage
+Local dev signing (for your own machine):
 
-1. Launch ScreenDusk.
-2. Drag the slider to set dimming intensity.
-3. Toggle **Enable dimming** to quickly turn the overlay on/off.
-4. Optionally enable startup and tray behavior.
-5. Use global hotkeys for quick adjustments.
+```powershell
+.\publish.ps1 -SignLocal
+```
 
-## How Dimming Works
+Production signing with trusted certificate (.pfx):
 
-ScreenDusk creates a borderless, transparent-enabled black window per monitor, sized exactly to each display.
+```powershell
+.\publish.ps1 -PfxPath "C:\certs\your-cert.pfx" -PfxPassword "<password>"
+```
 
-- The overlay windows are always on top.
-- Win32 extended styles make them **click-through** (`WS_EX_TRANSPARENT`) and hidden from Alt+Tab (`WS_EX_TOOLWINDOW`).
-- Dimming is controlled by setting each overlay window's opacity in real time.
+## SmartScreen Note (Important)
 
-Because this is a software overlay, it works independently from monitor hardware brightness controls.
+To distribute publicly without "unknown app" warnings, you need a trusted code-signing certificate and signing reputation.
 
-## Security Notes
+- Local self-signed certificates only help on the local trusted machine.
+- Public releases should be signed with a real CA-issued code-signing certificate.
+- EV certificates generally establish trust faster for SmartScreen reputation.
 
-- No external network calls.
-- No hardcoded secrets or credentials.
-- Uses only local settings storage and standard Windows APIs.
+## Release Process
 
-## Screenshots
+1. Update version metadata in [ScreenDusk.App/ScreenDusk.App.csproj](ScreenDusk.App/ScreenDusk.App.csproj)
+2. Update [CHANGELOG.md](CHANGELOG.md)
+3. Commit and tag (example: `v3.0.0`)
+4. Push tag to trigger GitHub release workflow in [.github/workflows/release.yml](.github/workflows/release.yml)
 
-> Placeholder: add screenshots here.
+## Repository Structure
 
-- Main window UI
-- Tray icon and context menu
-- Multi-monitor dimming example
+```text
+ScreenDusk/
+  .github/workflows/release.yml
+  CHANGELOG.md
+  LICENSE
+  SECURITY.md
+  publish.ps1
+  ScreenDusk.sln
+  ScreenDusk.App/
+```
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for reporting guidelines and security notes.
 
 ## License
 
-Choose a license before publishing publicly (for example, MIT).
+This project is licensed under the MIT License. See [LICENSE](LICENSE).

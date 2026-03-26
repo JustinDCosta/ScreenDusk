@@ -9,7 +9,16 @@
     <AssemblyName>ScreenDusk</AssemblyName>
     <RootNamespace>ScreenDusk.App</RootNamespace>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Version>3.0.0</Version>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <InformationalVersion>3.0.0</InformationalVersion>
+    <Product>ScreenDusk</Product>
+    <Company>ScreenDusk</Company>
+    <Description>Privacy-focused software dimming overlay for Windows.</Description>
     <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
 
   <ItemGroup>
