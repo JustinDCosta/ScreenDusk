@@ -34,28 +34,19 @@ jobs:
       - name: Zip Artifact
         run: Compress-Archive -Path .\ScreenDusk.App\bin\Release\net8.0-windows\win-x64\publish\* -DestinationPath .\ScreenDusk-Windows-x64-Portable.zip -Force
 
-      - name: Generate Checksum
-        run: (Get-FileHash .\ScreenDusk-Windows-x64-Portable.zip -Algorithm SHA256).Hash | Out-File .\ScreenDusk-Windows-x64-Portable.sha256.txt -Encoding ascii
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ScreenDusk-Windows-x64-Portable
-          path: |
-            ScreenDusk-Windows-x64-Portable.zip
-            ScreenDusk-Windows-x64-Portable.sha256.txt
+          path: ScreenDusk-Windows-x64-Portable.zip
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            ScreenDusk-Windows-x64-Portable.zip
-            ScreenDusk-Windows-x64-Portable.sha256.txt
+          files: ScreenDusk-Windows-x64-Portable.zip
           body: |
             Primary download: ScreenDusk-Windows-x64-Portable.zip
-
-            Verify integrity: ScreenDusk-Windows-x64-Portable.sha256.txt
 
             After downloading, extract the zip and run ScreenDusk.exe.
           generate_release_notes: true
