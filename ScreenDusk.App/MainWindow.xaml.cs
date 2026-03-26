@@ -30,9 +30,11 @@ public partial class MainWindow : Window
         _trayService.ExitRequested += TrayServiceOnExitRequested;
         _viewModel.ExitRequested += (_, _) => Close();
         _viewModel.HideToTrayRequested += (_, _) => HideToTray();
+        _viewModel.HotkeysChanged += (_, _) => RegisterHotkeys();
 
         Loaded += OnLoaded;
         Closing += OnClosing;
+        StateChanged += OnStateChanged;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -40,10 +42,12 @@ public partial class MainWindow : Window
         var executablePath = Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
         _viewModel.Initialize(executablePath);
 
-        _hotkeyService.Register(this);
+        RegisterHotkeys();
         _hotkeyService.IncreaseRequested += (_, _) => _viewModel.IncreaseDimming();
         _hotkeyService.DecreaseRequested += (_, _) => _viewModel.DecreaseDimming();
         _hotkeyService.ToggleRequested += (_, _) => _viewModel.ToggleDimming();
+
+        UpdateMaximizeButtonGlyph();
     }
 
     private void OnClosing(object? sender, CancelEventArgs e)
@@ -75,10 +79,62 @@ public partial class MainWindow : Window
 
     private void TitleBar_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        if (e.ClickCount == 2)
+        {
+            ToggleMaximizeRestore();
+            return;
+        }
+
         if (e.ButtonState == MouseButtonState.Pressed)
         {
             DragMove();
         }
+    }
+
+    private void MinimizeButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    private void MaximizeRestoreButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        ToggleMaximizeRestore();
+    }
+
+    private void CloseButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.RequestExit();
+    }
+
+    private void ToggleMaximizeRestore()
+    {
+        WindowState = WindowState == WindowState.Maximized
+            ? WindowState.Normal
+            : WindowState.Maximized;
+    }
+
+    private void OnStateChanged(object? sender, EventArgs e)
+    {
+        UpdateMaximizeButtonGlyph();
+    }
+
+    private void UpdateMaximizeButtonGlyph()
+    {
+        if (MaximizeRestoreButton is null)
+        {
+            return;
+        }
+
+        MaximizeRestoreButton.Content = WindowState == WindowState.Maximized ? "❐" : "[]";
+    }
+
+    private void RegisterHotkeys()
+    {
+        _hotkeyService.Register(
+            this,
+            _viewModel.IncreaseHotkeyKey,
+            _viewModel.DecreaseHotkeyKey,
+            _viewModel.ToggleHotkeyKey);
     }
 
     protected override void OnClosed(EventArgs e)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using ScreenDusk.App.Infrastructure;
@@ -40,9 +41,19 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
 
     public event EventHandler? ExitRequested;
 
+    public event EventHandler? HotkeysChanged;
+
     public ICommand HideToTrayCommand { get; }
 
     public ICommand ExitCommand { get; }
+
+    public IReadOnlyList<string> AvailableHotkeyKeys { get; } = new[]
+    {
+        "Up", "Down", "Left", "Right",
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+        "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"
+    };
 
     public bool IsExiting => _isExiting;
 
@@ -122,6 +133,57 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         }
     }
 
+    public string IncreaseHotkeyKey
+    {
+        get => _settings.IncreaseHotkeyKey;
+        set
+        {
+            if (string.Equals(_settings.IncreaseHotkeyKey, value, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            _settings.IncreaseHotkeyKey = value;
+            OnPropertyChanged(nameof(IncreaseHotkeyKey));
+            SaveSettings();
+            HotkeysChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public string DecreaseHotkeyKey
+    {
+        get => _settings.DecreaseHotkeyKey;
+        set
+        {
+            if (string.Equals(_settings.DecreaseHotkeyKey, value, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            _settings.DecreaseHotkeyKey = value;
+            OnPropertyChanged(nameof(DecreaseHotkeyKey));
+            SaveSettings();
+            HotkeysChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public string ToggleHotkeyKey
+    {
+        get => _settings.ToggleHotkeyKey;
+        set
+        {
+            if (string.Equals(_settings.ToggleHotkeyKey, value, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            _settings.ToggleHotkeyKey = value;
+            OnPropertyChanged(nameof(ToggleHotkeyKey));
+            SaveSettings();
+            HotkeysChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     public void Initialize(string executablePath)
     {
         _executablePath = executablePath;
@@ -137,6 +199,9 @@ public sealed class MainViewModel : INotifyPropertyChanged, IDisposable
         OnPropertyChanged(nameof(DimLevelText));
         OnPropertyChanged(nameof(IsDimmingEnabled));
         OnPropertyChanged(nameof(MinimizeToTray));
+        OnPropertyChanged(nameof(IncreaseHotkeyKey));
+        OnPropertyChanged(nameof(DecreaseHotkeyKey));
+        OnPropertyChanged(nameof(ToggleHotkeyKey));
 
         ApplyDimming();
     }

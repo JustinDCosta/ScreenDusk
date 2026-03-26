@@ -9,4 +9,10 @@ public sealed class AppSettings
     public bool LaunchOnStartup { get; set; } = false;
 
     public bool MinimizeToTray { get; set; } = true;
+
+    public string IncreaseHotkeyKey { get; set; } = "Up";
+
+    public string DecreaseHotkeyKey { get; set; } = "Down";
+
+    public string ToggleHotkeyKey { get; set; } = "D";
 }

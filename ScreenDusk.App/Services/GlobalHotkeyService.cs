@@ -14,21 +14,34 @@ public sealed class GlobalHotkeyService : IDisposable
 
     private HwndSource? _source;
     private IntPtr _handle;
+    private bool _hookAdded;
 
     public event EventHandler? IncreaseRequested;
     public event EventHandler? DecreaseRequested;
     public event EventHandler? ToggleRequested;
 
-    public void Register(Window hostWindow)
+    public void Register(Window hostWindow, string increaseKey, string decreaseKey, string toggleKey)
     {
-        var interop = new WindowInteropHelper(hostWindow);
-        _handle = interop.Handle;
-        _source = HwndSource.FromHwnd(_handle);
-        _source?.AddHook(HwndHook);
+        if (_handle == IntPtr.Zero)
+        {
+            var interop = new WindowInteropHelper(hostWindow);
+            _handle = interop.Handle;
+            _source = HwndSource.FromHwnd(_handle);
 
-        RegisterHotkey(IncreaseId, ModifierKeys.Control | ModifierKeys.Alt, Key.Up);
-        RegisterHotkey(DecreaseId, ModifierKeys.Control | ModifierKeys.Alt, Key.Down);
-        RegisterHotkey(ToggleId, ModifierKeys.Control | ModifierKeys.Alt, Key.D);
+            if (!_hookAdded)
+            {
+                _source?.AddHook(HwndHook);
+                _hookAdded = true;
+            }
+        }
+
+        NativeMethods.UnregisterHotKey(_handle, IncreaseId);
+        NativeMethods.UnregisterHotKey(_handle, DecreaseId);
+        NativeMethods.UnregisterHotKey(_handle, ToggleId);
+
+        RegisterHotkey(IncreaseId, ModifierKeys.Control | ModifierKeys.Alt, ParseKey(increaseKey, Key.Up));
+        RegisterHotkey(DecreaseId, ModifierKeys.Control | ModifierKeys.Alt, ParseKey(decreaseKey, Key.Down));
+        RegisterHotkey(ToggleId, ModifierKeys.Control | ModifierKeys.Alt, ParseKey(toggleKey, Key.D));
     }
 
     public void Unregister()
@@ -46,6 +59,7 @@ public sealed class GlobalHotkeyService : IDisposable
         {
             _source.RemoveHook(HwndHook);
             _source = null;
+            _hookAdded = false;
         }
 
         _handle = IntPtr.Zero;
@@ -54,6 +68,11 @@ public sealed class GlobalHotkeyService : IDisposable
     private void RegisterHotkey(int id, ModifierKeys modifiers, Key key)
     {
         NativeMethods.RegisterHotKey(_handle, id, (uint)modifiers, (uint)KeyInterop.VirtualKeyFromKey(key));
+    }
+
+    private static Key ParseKey(string keyText, Key fallback)
+    {
+        return Enum.TryParse<Key>(keyText, true, out var parsedKey) ? parsedKey : fallback;
     }
 
     private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

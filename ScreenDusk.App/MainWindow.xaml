@@ -2,29 +2,29 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ScreenDusk"
-        Width="460"
-        Height="500"
-        MinWidth="400"
-        MinHeight="460"
+        Width="500"
+        Height="620"
+        MinWidth="460"
+        MinHeight="580"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         FontFamily="Segoe UI Variable Text"
         AllowsTransparency="True"
         WindowStyle="None">
     <Window.Resources>
-        <LinearGradientBrush x:Key="ShellBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#FFF8FAFD" Offset="0" />
-            <GradientStop Color="#FFE7EDF6" Offset="1" />
+        <LinearGradientBrush x:Key="ShellBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FFF6F9FC" Offset="0" />
+            <GradientStop Color="#FFEAF0F7" Offset="1" />
         </LinearGradientBrush>
 
         <Style x:Key="GhostButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="36" />
-            <Setter Property="Padding" Value="14,0" />
-            <Setter Property="Background" Value="#10FFFFFF" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="Background" Value="#14FFFFFF" />
             <Setter Property="Foreground" Value="#FF1F2937" />
             <Setter Property="BorderBrush" Value="#220B1F36" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontWeight" Value="DemiBold" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -55,13 +55,21 @@
             <Setter Property="Foreground" Value="White" />
         </Style>
 
-        <Style x:Key="TitleCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource GhostButtonStyle}">
-            <Setter Property="Width" Value="34" />
-            <Setter Property="Height" Value="34" />
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource GhostButtonStyle}">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="30" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontFamily" Value="Segoe UI Symbol" />
-            <Setter Property="Content" Value="&#xE711;" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="32" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Background" Value="#FCFFFFFF" />
+            <Setter Property="BorderBrush" Value="#25000000" />
+            <Setter Property="BorderThickness" Value="1" />
         </Style>
 
         <Style TargetType="CheckBox">
@@ -77,19 +85,16 @@
         </Style>
     </Window.Resources>
     <Grid Background="{StaticResource ShellBackgroundBrush}">
-        <Ellipse Width="280" Height="280" Fill="#18FFFFFF" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-80,-90,0,0" IsHitTestVisible="False" />
-        <Ellipse Width="200" Height="200" Fill="#10FFFFFF" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-60,-50" IsHitTestVisible="False" />
-
         <Border CornerRadius="20"
                 BorderBrush="#24000000"
                 BorderThickness="1"
                 Background="#F9FFFFFF"
-                Margin="18">
+                Margin="8">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="26" ShadowDepth="8" Opacity="0.16" />
+                <DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.14" />
             </Border.Effect>
 
-            <Grid Margin="24">
+            <Grid Margin="18">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -97,23 +102,22 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="0,0,0,10" MouseLeftButtonDown="TitleBar_OnMouseLeftButtonDown">
+                <Grid Grid.Row="0" Margin="0,0,0,10" Background="Transparent" MouseLeftButtonDown="TitleBar_OnMouseLeftButtonDown">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Width="36" Height="36" CornerRadius="10" Background="#150067C0" VerticalAlignment="Center">
-                        <TextBlock Text="SD" FontWeight="Bold" Foreground="{StaticResource BrushAccent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-
-                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                        <TextBlock Text="Screen Dimmer" FontSize="24" FontWeight="SemiBold" Foreground="#FF0F172A" />
-                        <TextBlock Text="Comfort dimming overlay for late-night focus" FontSize="12" Foreground="#FF5B6678" Margin="0,2,0,0" />
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="ScreenDusk" FontSize="24" FontWeight="SemiBold" Foreground="#FF0F172A" />
+                        <TextBlock Text="Comfort dimming overlay for late-night use" FontSize="12" Foreground="#FF5B6678" Margin="0,2,0,0" />
                     </StackPanel>
 
-                    <Button Grid.Column="2" Style="{StaticResource TitleCloseButtonStyle}" Command="{Binding ExitCommand}" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Button Style="{StaticResource TitleBarButtonStyle}" Content="_" Click="MinimizeButton_OnClick" />
+                        <Button x:Name="MaximizeRestoreButton" Margin="6,0,0,0" Style="{StaticResource TitleBarButtonStyle}" Content="[]" Click="MaximizeRestoreButton_OnClick" />
+                        <Button Margin="6,0,0,0" Style="{StaticResource TitleBarButtonStyle}" Content="X" Click="CloseButton_OnClick" />
+                    </StackPanel>
                 </Grid>
 
                 <TextBlock Grid.Row="1"
@@ -127,9 +131,7 @@
                         <StackPanel>
                             <DockPanel>
                                 <TextBlock Text="Dimming level" FontSize="14" FontWeight="SemiBold" Foreground="#FF111827" VerticalAlignment="Center" />
-                                <Border DockPanel.Dock="Right" CornerRadius="8" Padding="9,3" Background="#140078D4">
-                                    <TextBlock Text="{Binding DimLevelText}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushAccent}" />
-                                </Border>
+                                <TextBlock DockPanel.Dock="Right" Text="{Binding DimLevelText}" FontSize="15" FontWeight="SemiBold" Foreground="#FF0B63B6" />
                             </DockPanel>
                             <Slider Minimum="0"
                                     Maximum="100"
@@ -152,8 +154,44 @@
                     <CheckBox IsChecked="{Binding MinimizeToTray}"
                               Content="Minimize to system tray" />
 
+                    <Border CornerRadius="12" Padding="14" BorderBrush="#1A000000" BorderThickness="1" Background="#4FFFFFFF" Margin="0,16,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Custom Hotkeys" FontSize="14" FontWeight="SemiBold" Foreground="#FF111827" />
+                            <TextBlock Text="Modifier keys stay fixed as Ctrl + Alt." Margin="0,4,0,10" FontSize="12" Foreground="#FF5B6678" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Text="Increase dimming" VerticalAlignment="Center" Margin="0,0,12,8" />
+                                <ComboBox Grid.Row="0" Grid.Column="1"
+                                          ItemsSource="{Binding AvailableHotkeyKeys}"
+                                          SelectedItem="{Binding IncreaseHotkeyKey, UpdateSourceTrigger=PropertyChanged}"
+                                          Margin="0,0,0,8" />
+
+                                <TextBlock Grid.Row="1" Text="Decrease dimming" VerticalAlignment="Center" Margin="0,0,12,8" />
+                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                          ItemsSource="{Binding AvailableHotkeyKeys}"
+                                          SelectedItem="{Binding DecreaseHotkeyKey, UpdateSourceTrigger=PropertyChanged}"
+                                          Margin="0,0,0,8" />
+
+                                <TextBlock Grid.Row="2" Text="Toggle dimming" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                <ComboBox Grid.Row="2" Grid.Column="1"
+                                          ItemsSource="{Binding AvailableHotkeyKeys}"
+                                          SelectedItem="{Binding ToggleHotkeyKey, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
                     <TextBlock Margin="0,16,0,0"
-                               Text="Hotkeys: Ctrl + Alt + Up/Down (brightness), Ctrl + Alt + D (toggle)"
+                               Text="Hotkeys apply immediately when you change them."
                                Foreground="#FF5B6678"
                                TextWrapping="Wrap" />
                 </StackPanel>
