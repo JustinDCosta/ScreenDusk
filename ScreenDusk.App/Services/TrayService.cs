@@ -11,7 +11,7 @@ public sealed class TrayService : IDisposable
     public event EventHandler? ShowRequested;
     public event EventHandler? ExitRequested;
 
-    public TrayService()
+    public TrayService(Icon icon)
     {
         var menu = new ContextMenuStrip();
         menu.Items.Add("Open ScreenDusk", null, (_, _) => ShowRequested?.Invoke(this, EventArgs.Empty));
@@ -20,7 +20,7 @@ public sealed class TrayService : IDisposable
         _notifyIcon = new NotifyIcon
         {
             Text = "ScreenDusk",
-            Icon = SystemIcons.Information,
+            Icon = icon,
             Visible = true,
             ContextMenuStrip = menu
         };

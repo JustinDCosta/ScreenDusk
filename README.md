@@ -25,6 +25,7 @@ This project uses **C# + WPF (.NET 8)** because it is:
   - `Ctrl + Alt + Down`: decrease dimming
   - `Ctrl + Alt + D`: toggle dimming
 - Persistent user settings (stored in `%LOCALAPPDATA%/ScreenDusk/settings.json`).
+- Lightweight MVVM structure for maintainability.
 
 ## Folder Structure
 
@@ -44,15 +45,24 @@ ScreenDusk/
     Infrastructure/
       NativeMethods.cs
     Services/
+      AppIconFactory.cs
       DimmingOverlayManager.cs
       GlobalHotkeyService.cs
       OverlayWindow.cs
       SettingsService.cs
       StartupService.cs
       TrayService.cs
+    ViewModels/
+      MainViewModel.cs
+    Infrastructure/
+      RelayCommand.cs
     Themes/
       Colors.xaml
     Resources/
+    Properties/
+      PublishProfiles/
+        FolderProfile.pubxml
+  publish.ps1
 ```
 
 ## Build and Run
@@ -78,6 +88,18 @@ ScreenDusk/
    ```powershell
    dotnet run --project .\ScreenDusk.App\ScreenDusk.App.csproj
    ```
+
+### Publish (single-file, self-contained)
+
+```powershell
+./publish.ps1
+```
+
+Or directly:
+
+```powershell
+dotnet publish .\ScreenDusk.App\ScreenDusk.App.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+```
 
 ## Usage
 

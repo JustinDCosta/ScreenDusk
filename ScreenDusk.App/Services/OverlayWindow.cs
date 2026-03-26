@@ -1,7 +1,6 @@
 using System;
 using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Media;
 using ScreenDusk.App.Infrastructure;
 
 namespace ScreenDusk.App.Services;
@@ -18,7 +17,7 @@ public sealed class OverlayWindow : Window
         WindowStyle = WindowStyle.None;
         ResizeMode = ResizeMode.NoResize;
         AllowsTransparency = true;
-        Background = Brushes.Black;
+        Background = System.Windows.Media.Brushes.Black;
         ShowInTaskbar = false;
         ShowActivated = false;
         Topmost = true;
